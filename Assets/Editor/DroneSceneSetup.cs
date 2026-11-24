@@ -80,6 +80,9 @@ public static class DroneSceneSetup
         camGO.transform.localPosition = new Vector3(0f, 0.25f, -0.7f);
         camGO.transform.localEulerAngles = new Vector3(15f, 0f, 0f);
 
+        // Telemetry + flight HUD
+        FlightHudSetup.Setup(drone);
+
         EditorSceneManager.SaveScene(scene, ScenePath);
         EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ScenePath, true) };
         AssetDatabase.SaveAssets();

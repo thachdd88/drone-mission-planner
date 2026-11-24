@@ -1,0 +1,53 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="FlightHud.uss" />
+    <ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
+
+        <ui:VisualElement class="hud-row" picking-mode="Ignore">
+            <ui:VisualElement name="gps-panel" class="hud-panel">
+                <ui:Label text="GPS (SIM)" class="hud-title" />
+                <ui:Label name="gps-lat" text="LAT  --" class="hud-value" />
+                <ui:Label name="gps-lon" text="LON  --" class="hud-value" />
+                <ui:Label name="gps-alt" text="MSL  --" class="hud-value" />
+            </ui:VisualElement>
+
+            <ui:VisualElement name="heading-panel" class="hud-panel hud-panel--center">
+                <ui:Label text="HEADING" class="hud-title" />
+                <ui:Label name="heading" text="000° N" class="hud-value hud-value--big" />
+            </ui:VisualElement>
+
+            <ui:VisualElement name="battery-panel" class="hud-panel hud-panel--right">
+                <ui:Label text="BATTERY" class="hud-title" />
+                <ui:VisualElement class="batt-row">
+                    <ui:Label name="batt-percent" text="100%" class="hud-value hud-value--big" />
+                    <ui:Label name="batt-voltage" text="16.8 V" class="hud-value" />
+                </ui:VisualElement>
+                <ui:VisualElement class="batt-bar">
+                    <ui:VisualElement name="batt-fill" class="batt-fill" />
+                </ui:VisualElement>
+                <ui:Label name="flight-time" text="00:00" class="hud-value" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="hud-center" picking-mode="Ignore">
+            <ui:Label name="warning" text="LOW BATTERY" class="hud-warning" picking-mode="Ignore" />
+        </ui:VisualElement>
+
+        <ui:VisualElement class="hud-row hud-row--bottom" picking-mode="Ignore">
+            <ui:VisualElement name="altitude-panel" class="hud-panel">
+                <ui:Label text="ALTITUDE" class="hud-title" />
+                <ui:Label name="alt-agl" text="AGL  --" class="hud-value hud-value--big" />
+                <ui:Label name="alt-rel" text="REL  --" class="hud-value" />
+                <ui:Label name="vspeed" text="V/S  --" class="hud-value" />
+            </ui:VisualElement>
+
+            <ui:VisualElement name="nav-panel" class="hud-panel hud-panel--right">
+                <ui:Label text="NAVIGATION" class="hud-title" />
+                <ui:Label name="gspeed" text="GS   --" class="hud-value hud-value--big" />
+                <ui:Label name="home-dist" text="HOME --" class="hud-value" />
+                <ui:Label name="home-bearing" text="BRG  --" class="hud-value" />
+                <ui:Label name="travelled" text="DIST --" class="hud-value" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>

@@ -17,16 +17,40 @@ public class FlightHud : MonoBehaviour
     public float lowBattery = 30f;
     public float criticalBattery = 15f;
 
+    [Header("Scaling")]
+    [Tooltip("Screen height the HUD is designed for. At this height the HUD is drawn at 1:1.")]
+    public float referenceHeight = 1080f;
+
+    [Tooltip("The HUD never shrinks below this, so text stays readable in small windows.")]
+    public float minScale = 0.8f;
+
+    [Tooltip("The HUD never grows beyond this on very large screens.")]
+    public float maxScale = 2f;
+
     static readonly string[] Compass = { "N", "NE", "E", "SE", "S", "SW", "W", "NW" };
 
     Label lat, lon, gpsAlt, heading, battPercent, battVoltage, flightTime;
     Label altAgl, altRel, vSpeed, gSpeed, homeDist, homeBearing, travelled, warning;
     VisualElement battFill;
     float nextRefresh;
+    PanelSettings runtimePanel;
+    int lastScreenHeight;
 
     void OnEnable()
     {
-        var root = GetComponent<UIDocument>().rootVisualElement;
+        var doc = GetComponent<UIDocument>();
+
+        // Scale with a runtime copy of the panel settings so the asset on disk is never modified.
+        if (runtimePanel == null && doc.panelSettings != null)
+        {
+            runtimePanel = Instantiate(doc.panelSettings);
+            runtimePanel.name = doc.panelSettings.name + " (Runtime)";
+            runtimePanel.scaleMode = PanelScaleMode.ConstantPixelSize;
+            doc.panelSettings = runtimePanel;
+        }
+        lastScreenHeight = 0;
+
+        var root = doc.rootVisualElement;
         lat = root.Q<Label>("gps-lat");
         lon = root.Q<Label>("gps-lon");
         gpsAlt = root.Q<Label>("gps-alt");
@@ -48,8 +72,21 @@ public class FlightHud : MonoBehaviour
         nextRefresh = 0f;
     }
 
+    void OnDestroy()
+    {
+        if (runtimePanel != null) Destroy(runtimePanel);
+    }
+
+    void UpdateScale()
+    {
+        if (runtimePanel == null || Screen.height == lastScreenHeight) return;
+        lastScreenHeight = Screen.height;
+        runtimePanel.scale = Mathf.Clamp(Screen.height / Mathf.Max(1f, referenceHeight), minScale, maxScale);
+    }
+
     void Update()
     {
+        UpdateScale();
         if (telemetry == null || lat == null) return;
         if (Time.unscaledTime < nextRefresh) return;
         nextRefresh = Time.unscaledTime + 1f / Mathf.Max(1f, refreshRate);
